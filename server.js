@@ -74,7 +74,7 @@ app.get('/', function(req, res) {
 *  "/"  endpoint                                    
 *  sends the data required to populate heatmap
 */
-app.get("/geodata", function(req, res) {
+app.post("/geodata", function(req, res) {
   console.log(req.body);
 });
 

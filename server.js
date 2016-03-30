@@ -20,8 +20,8 @@ function handleError(res, reason, message, code) {
 }
 
 /*
-*  "/"                                          // edit this to describe
-*
+*  "/"                                      
+*  sends the data required to populate heatmap
 */
 
  app.get('/', function(req, res) {
@@ -33,6 +33,7 @@ function handleError(res, reason, message, code) {
         var globalData; // our parsed data array
         var IPTable;  // our desired values (lat,long, & IPv6 of these lat,long)
         var densityHash; // count of IPv6 for each lat, long
+        var densityList;
 
         var parser = parse(function(err, data){
 
@@ -53,11 +54,18 @@ function handleError(res, reason, message, code) {
               densityHash[latLong] = 1;
           }
           }
-        });
+
+          densityList = [];
+          Object.keys(densityHash).forEach(function(key){
+                var b = key.split(',').map(Number);
+                b.push(densityHash[key]/totalCount);
+                densityList.push(b);
+              });
+          });
 
         fs.createReadStream('file.csv').pipe(parser);
 
-        res.send(densityHash); 
+        res.send(densityList); 
 });
 
 

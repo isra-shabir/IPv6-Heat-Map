@@ -11,7 +11,6 @@ var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
   });
-});
 
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
@@ -67,16 +66,3 @@ function handleError(res, reason, message, code) {
 
         res.send(densityList); 
 });
-
-
-/*  "/data+paramaters" // define what the endpoint is here! 
- *   
- */
-
-app.get("/data", function(req, res) { 
-
-
-  // return the list 
-
-});
-

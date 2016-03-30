@@ -16,7 +16,7 @@
    <div id="mapid" style="width: 600px; height: 400px"></div>
    <script src="leaflet-heat.js"></script>
 
-   <script>
+   <!-- <script>
    	$.get('/', {}, function(data){
 
    		console.log(data);
@@ -36,75 +36,78 @@
 		});
 
 	</script>
+	-->
 
-	<div id="inputid" style="width: 400px; height:400px">
-		<p> Please enter the respective values in each field and hit Submit </p>
-		<form id="sendCoordinates" action="http://localhost:8080/geodata" method="post"> 
-		MinLat: <input type="text" name="MinLat" id="minlat"><br>
-		MaxLat: <input type="text" name="MaxLat" id="maxlat"><br>
-		MinLong: <input type="text" name="MinLong" id="minlong"><br>
-		MinLong: <input type="text" name="MaxLong" id="maxlong"><br>
-		<input type="button" value="submit" id="s1">
+		<p> Please enter a value between -90 and 90 for lat, and -180 and 180 before hitting
+			submit.</p>
+		<form name="sendCoordinates" action="http://sheltered-headland-39900.herokuapp.com/geodata" method="post"> 
+		<label> MinLat: </label>
+		<input type="text" name="MinLat" value="0"><br>
+		<label> MaxLat: </label>
+		<input type="text" name="MaxLat" value="1"><br>
+		<label> MinLong: </label>
+		<input type="text" name="MinLong" value="0"><br>
+		<label> MaxLong: </label>
+		<input type="text" name="MaxLong" value="1"><br>
+
+		<input type="submit" value="submit" id="s1">
 		</form>
-	</div>
 
+		<div></div>
 
 	<script>
-	$(document).ready(function() {
-	    $(form)
-	        .on('success.form.fv', function(e) {
-	            // Prevent form submission
-	            e.preventDefault();
 
-	            var $form    = $(e.target),
-	                formData = new FormData(),
-	                params   = $form.serializeArray(),
+		var form = document.forms.namedItem("sendCoordinates");
+		form.addEventListener('submit', function(ev) {
 
-	            $.each(params, function(i, val) {
-	                formData.append(val.name, val.value);
-	            });
-	            console.log(formData);
-	            $.ajax({
-	                url: $form.attr('action'),
-	                data: formData,
-	                cache: false,
-	                contentType: false,
-	                processData: false,
-	                type: 'POST',
-	                success: function(result) {
-	                    console.log(result);
-	                }
-	            });
-	        });
-	});
+	 	var oOutput = document.querySelector("div"),
+	    oData = new FormData(form);
+
+	  	oData.append("CustomField", "This is some extra data");
+
+	  	var oReq = new XMLHttpRequest();
+	  	oReq.open("POST", "http://sheltered-headland-39900.herokuapp.com/geodata", true);
+	  	oReq.onload = function(oEvent) {
+	    if (oReq.status == 200) {
+	      oOutput.innerHTML = "Sent!";
+	    } else {
+	      oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to send data.<br \/>";
+	    }
+	  };
+
+	  	oReq.send(oData);
+	  	ev.preventDefault();
+	  }, false);
+
+	    // $("#sendCoordinates")
+	    //     .on('submit', function(e) {
+
+	    //     	e.preventDefault();
+
+	    //         // var $form    = $(e.target),
+	    //      	var formData = new FormData();
+	    //         // var params   = $form.serializeArray();
+
+	    //         formData.append("heyhey", "hihi");
+
+	    //         // $.each(params, function(i, val) {
+	    //         //     formData.append(val.name, val.value);
+	    //         // });
+
+	    //         $.ajax({
+	    //             // url: $form.attr('action'),
+	    //             url: "http://localhost:8080/geodata",
+	    //             data: formData,
+	    //             cache: false,
+	    //             contentType: false,
+	    //             processData: false,
+	    //             type: 'POST',
+	    //             success: function(result) {
+	    //                 console.log(result + "you");
+	    //             }
+	    //         });
+	    //     });
 	</script>
-
-
-	<!-- <script>
-	  $('#sendCoordinates').on('submit', function (event) {
-		alert('Hi');
-	    event.preventDefault();
-	    var data = {
-	      MinLat: $('#minlat').val(),
-  	      MaxLat: $('#maxlat').val(),
-	      MinLong: $('#minlong').val(),
-	      MaxLong: $('#maxlong').val(),
-	    };
-		
-	    $.ajax({
-	      url: 'http://127.0.0.1:8080/geodata',
-	      data: data,
-	      method: 'POST'
-	    }).then(function (response) {
-	      
-	      $('body').append(response);
-	    }).catch(function (err) {
-	      console.error(err);
-	    });
-	  });
-	</script>
-
-	-->
 
 </body>
 </html>

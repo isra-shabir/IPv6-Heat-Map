@@ -39,36 +39,40 @@
 	</script>
 
 	<div id="inputid" style="width: 400px; height:400px">
-		<form id="sendCoordinates" action="http://localhost:8080/geodata"> 
-
 		<p> Please enter the respective values in each field and hit Submit </p>
-
-		MinLat: <input type="text" name="MinLat" value=""><br>
-		MaxLat: <input type="text" name="MaxLat" value=""><br>
-		MinLong: <input type="text" name="MinLong" value=""><br>
-		MinLong: <input type="text" name="MaxLong" value=""><br>
-		<input type="submit" value="Submit">
-
+		<form id="sendCoordinates" action="/geodata"> 
+		MinLat: <input type="text" name="MinLat" id="minlat"><br>
+		MaxLat: <input type="text" name="MaxLat" id="maxlat"><br>
+		MinLong: <input type="text" name="MinLong" id="minlong"><br>
+		MinLong: <input type="text" name="MaxLong" id="maxlong"><br>
+		<input type="button" value="Submit" id="s1">
 		</form>
-		
+
 		<script>
-		$(document).ready(function() {
-		 $('#uploadForm').submit(function() {
-		 
-		    $(this).ajaxSubmit({
 
-		        error: function(xhr) {
-		                status('Error: ' + xhr.status);
-		        },
 
-		        success: function(response) {
-		                console.log(response);
-		        }
-		   });
-		  return false;
-		  });    
-		});
-		</script>
+	  $('#sendCoordinates').on('submit', function (event) {
+		 //alert('Hi');
+	    event.preventDefault();
+	    var data = {
+	      MinLat: $('#minlat').val(),
+  	      MaxLat: $('#maxlat').val(),
+	      MinLong: $('#minlong').val(),
+	      MaxLong: $('#maxlong').val(),
+	    };
+		
+	    $.ajax({
+	      url: 'http://127.0.0.1:8081/geodata',
+	      data: data,
+	      method: 'POST'
+	    }).then(function (response) {
+	      
+	      $('body').append(response);
+	    }).catch(function (err) {
+	      console.error(err);
+	    });
+	  });
+</script>
 
 	</div>
 

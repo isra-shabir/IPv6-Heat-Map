@@ -7,8 +7,7 @@
   <meta name="description" content="Transloc Project App">
   <meta name="author" content="SitePoint">
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-  <script src="http://code.jquery.com/jquery-latest.min.js"
-        type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 
 
@@ -40,20 +39,38 @@
 	</script>
 
 	<div id="inputid" style="width: 400px; height:400px">
-		<form action="demo_form.asp">
+		<form id="sendCoordinates" action="http://localhost:8080/geodata"> 
 
 		<p> Please enter the respective values in each field and hit Submit </p>
 
-		MinLat: <input type="text" name="MinLat" value="-15"><br>
-		MaxLat: <input type="text" name="MaxLat" value="15"><br>
-		MinLong: <input type="text" name="MinLong" value="-30"><br>
-		MinLong: <input type="text" name="MaxLong" value="30"><br>
+		MinLat: <input type="text" name="MinLat" value=""><br>
+		MaxLat: <input type="text" name="MaxLat" value=""><br>
+		MinLong: <input type="text" name="MinLong" value=""><br>
+		MinLong: <input type="text" name="MaxLong" value=""><br>
 		<input type="submit" value="Submit">
+
 		</form>
+		
+		<script>
+		$(document).ready(function() {
+		 $('#uploadForm').submit(function() {
+		 
+		    $(this).ajaxSubmit({
+
+		        error: function(xhr) {
+		                status('Error: ' + xhr.status);
+		        },
+
+		        success: function(response) {
+		                console.log(response);
+		        }
+		   });
+		  return false;
+		  });    
+		});
+		</script>
 
 	</div>
-
-	<script>src="parser.js"</script>
 
 </body>
 </html>

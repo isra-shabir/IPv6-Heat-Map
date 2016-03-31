@@ -59,7 +59,6 @@ var parser = parse(function(err, data){
 
 fs.createReadStream('file.csv').pipe(parser);
 
-
 /*
 *  "/"  endpoint                                    
 *  sends the data required to populate heatmap
@@ -73,12 +72,12 @@ app.get('/', function(req, res) {
 *  "/geodata"  endpoint                                    
 *   uses the params sent from the client side
 *   sends response to client with list of coordinates
-*   that are within the specified bounding box 
 */
 app.post("/geodata", function(req, res) {
   console.log("hey");
   console.log(req.body);
-  res.send("hi");
+
+  res.send("hello");
 
 });
 

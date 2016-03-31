@@ -7,7 +7,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 
 // Initialize the app.
-var server = app.listen(process.env.PORT || 8080, function () {
+var server = app.listen(process.env.PORT || 5000, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
   });
@@ -74,11 +74,18 @@ app.get('/', function(req, res) {
 *   sends response to client with list of coordinates
 */
 app.post("/geodata", function(req, res) {
-  console.log("hey");
-  console.log(req.body);
 
+  // upon receiving the bounding box,
+  // execute:
+  // for 
+
+  console.log(req.body);
+  res.set('content-type','application/json')
   res.send("hello");
 
 });
+
+
+
 
 

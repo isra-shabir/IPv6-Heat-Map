@@ -11,82 +11,104 @@
 
 </head>
 
-
 <body>
-   <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
+
    <div id="mapid" style="width: 600px; height: 400px"></div>
-   <script src="leaflet-heat.js"></script>
 
+   	<div id="heatmap">
+   	<input id="heatit" type="submit" value="Heat up!">
 
-    <script>
-   	$.get('/', {}, function(data){
+    <script>   		
 
-   		var mymap = L.map('mapid').setView([37.8, -96], 4); 
+    $(document).ready(function() {
 
-		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			id: 'mapbox.streets'
-		}).addTo(mymap);
+    		L.map.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw'
 
-		var heat = L.heatLayer(data, {radius: 25}).addTo(mymap);
+		  	console.log("before creating map");
 
-		});
+	   		var mymap = L.map('mapid').setView([37.8, -96], 4); 
 
+	   		console.log("creating map")
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+				maxZoom: 18,
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+					'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+					'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				id: 'mapbox.streets'
+			}).addTo(mymap);
+
+			$("#heatit").click(function (){
+
+				$.ajax({
+	   			 	url:"/heatmap",
+	   			 	type: "POST",
+	   			 	success: function(result) {
+	                    // console.log(result);
+	                    console.log("populating now");
+	                    var heat = L.heatLayer(result, {radius: 10}).addTo(mymap);
+	                }	   			 
+	   				});
+	   			});
+	   	});
 	</script>
 
 
+<!-- 
 	<p> Please enter a value between -90 and 90 for lat, and -180 and 180 before hitting
 		submit.</p>
 
 	<form name="sendCoordinates" action="/geodata" method="post"> 
-	<label> MinLat: </label>
+
+	<div>
+	<label for="minlat"> MinLat: </label>
 	<input type="text" name="MinLat" value="0"><br>
-	<label> MaxLat: </label>
+	<label for="maxlat"> MaxLat: </label>
 	<input type="text" name="MaxLat" value="1"><br>
-	<label> MinLong: </label>
+	<label for="minlong"> MinLong: </label>
 	<input type="text" name="MinLong" value="0"><br>
-	<label> MaxLong: </label>
+	<label for="maxlong"> MaxLong: </label>
 	<input type="text" name="MaxLong" value="1"><br>
 
-	<input type="submit" value="submit" id="s1">
+	<input type="submit" value="submit" id="s1" />
 	</form>
 
+	</div> --> 
 
-	<script>
+	// <script>
 
-		$(document).ready(function() {
-   	    $(sendCoordinates)
-	        .on('submit', function(e) {
+	// 	$(document).ready(function() {
+ //   	    $(sendCoordinates)
+	//         .on('submit', function(e) {
 
-	            // Prevent form submission
-	            e.preventDefault();
+	//             // Prevent form submission
+	//             e.preventDefault();
 
-	            var $form    = $(e.target),
-	                formData = new FormData(),
-	                params   = $form.serializeArray();
+	//             var $form    = $(e.target),
+	//                 formData = new FormData(),
+	//                 params   = $form.serializeArray();
 
-	            $.each(params, function(i, val) {
-	                formData.append(val.name, val.value);
-	            });
-
-	            $.ajax({
-	                url: $form.attr('action'),
-	                data: formData,
-	                cache: false,
-	                contentType: false,
-	                processData: false,
-	                type: 'POST',
-	                success: function(result) {
-	                    console.log(result+"hi");
-	                }
-	            });
-	        });
-		});
+	//             $.each(params, function(i, val) {
+	//                 formData.append(val.name, val.value);
+	//             });
+	            
+	//             $.ajax({
+	//                 url:  $form.attr("action"),
+	//                 data: formData,
+	//                 cache: false,
+	//                 contentType: false,
+	//                 processData: false,
+	//                 type: 'POST',
+	//                 success: function(result) {
+	//                     console.log(result+"hi");
+	//                 }
+	//             });
+	        	
+	//         });
+	// 	});
 	
-	</script>
+	// </script> 
 
 </body>
 </html>

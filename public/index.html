@@ -47,7 +47,7 @@
 	   			 	success: function(result) {
 	                    // console.log(result);
 	                    console.log("populating now");
-	                    var heat = L.heatLayer(result, {radius: 10}).addTo(mymap);
+	                    var heat = L.heatLayer(result, {radius: }).addTo(mymap);
 	                }	   			 
 	   				});
 	   			});
@@ -55,7 +55,7 @@
 	</script>
 
 
-<!-- 
+
 	<p> Please enter a value between -90 and 90 for lat, and -180 and 180 before hitting
 		submit.</p>
 
@@ -74,41 +74,41 @@
 	<input type="submit" value="submit" id="s1" />
 	</form>
 
-	</div> --> 
+	</div> 
 
-	// <script>
+	<script>
 
-	// 	$(document).ready(function() {
- //   	    $(sendCoordinates)
-	//         .on('submit', function(e) {
+		$(document).ready(function() {
+   	    $(sendCoordinates)
+	        .on('submit', function(e) {
 
-	//             // Prevent form submission
-	//             e.preventDefault();
+	            // Prevent form submission
+	            e.preventDefault();
 
-	//             var $form    = $(e.target),
-	//                 formData = new FormData(),
-	//                 params   = $form.serializeArray();
+	            var $form    = $(e.target),
+	                formData = new FormData(),
+	                params   = $form.serializeArray();
 
-	//             $.each(params, function(i, val) {
-	//                 formData.append(val.name, val.value);
-	//             });
+	            $.each(params, function(i, val) {
+	                formData.append(val.name, val.value);
+	            });
 	            
-	//             $.ajax({
-	//                 url:  $form.attr("action"),
-	//                 data: formData,
-	//                 cache: false,
-	//                 contentType: false,
-	//                 processData: false,
-	//                 type: 'POST',
-	//                 success: function(result) {
-	//                     console.log(result+"hi");
-	//                 }
-	//             });
+	            $.ajax({
+	                url:  $form.attr("action"),
+	                data: formData,
+	                cache: false,
+	                contentType: false,
+	                processData: false,
+	                type: 'POST',
+	                success: function(result) {
+	                    console.log(result+"hi");
+	                }
+	            });
 	        	
-	//         });
-	// 	});
+	        });
+		});
 	
-	// </script> 
+	</script> 
 
 </body>
 </html>

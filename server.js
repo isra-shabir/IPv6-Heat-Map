@@ -12,10 +12,10 @@ var fs = require('fs');
 var parse = require('csv').parse; // server side module to parse a csv file.
 
 var totalCount; // total lat,longs
-var globalData; // our parsed data array
-var IPTable;  // our desired values (lat,long, & IPv6 of these lat,long)
+var globalData; // our parsed data array from csv file
+var  IPTable;; // table: [[IpV6, [lat, long]], ... , [[IpV6],[lat,long]]]
 var densityHash; // count of IPv6 for each lat, long
-var densityList;
+var densityList; // 
 
 var parser = parse(function(err, data){
 
@@ -24,26 +24,24 @@ var parser = parse(function(err, data){
 
   IPTable = []; // table: [[IpV6, [lat, long]], ... , [[IpV6],[lat,long]]]
   densityHash = {}; // hash: {[lat,long] : count}
+
   for (var i =0; i < globalData.length; i++){
-
     IPTable.push([globalData[i][1], [globalData[i][7], globalData[i][8]]]);
-    latLong = [IPTable[i][1]];
+    latLong = [IPTable[i][1]]; // the lat/long array
 
-    if (densityHash[latLong]) {
+    if (densityHash[latLong]) { // counting the total IPv6 values worldwide
       densityHash[latLong] +=1;
     }
     else {
       densityHash[latLong] = 1;
   }
   }
-  densityList = [];
+  densityList = []; // density for each lat, long pair
   Object.keys(densityHash).forEach(function(key){
         var b = key.split(',').map(Number);
         b.push(densityHash[key]/totalCount);
         densityList.push(b);
       });
-  // console.log(densityList);
-  // console.log(globalData);
   });
 fs.createReadStream('file.csv').pipe(parser);
 
@@ -119,10 +117,5 @@ function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
   res.status(code || 500).json({"error": message});
 }
-
-
-
-
-
 
 

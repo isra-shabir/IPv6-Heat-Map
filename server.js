@@ -73,9 +73,30 @@ app.post('/heatmap', function(req, res) {
 */
 app.post("/geodata", function(req, res) {
 
-  console.log(req.body);
+  var valueList = [];
+  var geoList = []; // coordinates within bounding box
+  var data = req.body;
+//  console.log(data);
+  for (var key in data) {
+    valueList.push(data[key]); 
+  }
+ 
+  var minLat = valueList[0]; 
+  var maxLat = valueList[1];
+  var minLong = valueList[2];
+  var maxLong = valueList[3];
 
-  res.send("hello");
+  for (var i =0; i < densityList.length; i++ ) {
+      var lat = densityList[i][0];
+      
+      var lon = densityList[i][1];
+     
+      if (lat > minLat && lat < maxLat){
+          if (lon > minLong && lon < maxLong){
+              geoList.push(densityList[i]);
+  }}};
+  
+  console.log(geoList); 
 
 });
 

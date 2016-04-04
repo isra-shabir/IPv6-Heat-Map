@@ -47,13 +47,15 @@ var parser = parse(function(err, data){
   });
 fs.createReadStream('file.csv').pipe(parser);
 
+
 /*
 *  "/"  endpoint                                    
-*  sends the data required to populate heatmap
+*  renders homepage html 
 */
 app.get('/', function(req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
+
 
 /*
 *  "/heatmap" endpoint
@@ -61,24 +63,24 @@ app.get('/', function(req, res) {
 *  used by client to populate heatmap
 */
 
+
 app.post('/heatmap', function(req, res) {
   res.send(densityList);
 });
+
 
 /*
 *  "/geodata"  endpoint                                    
 *   uses the params sent from the client side
 *   sends response to client with list of interested
-*   coordinates
+*   coordinates.
+*   If no coordinates with IPv6, sends a message
 */
 app.post("/geodata", function(req, res) {
 
-  var valueList = [];
-  var geoList = []; // coordinates within bounding box
-  var data = req.body;
-//  console.log(data);
-  for (var key in data) {
-    valueList.push(data[key]); 
+  var valueList;
+  for (var key in req.body) {
+     valueList = req.body[key];
   }
  
   var minLat = valueList[0]; 
@@ -86,25 +88,31 @@ app.post("/geodata", function(req, res) {
   var minLong = valueList[2];
   var maxLong = valueList[3];
 
+  var geoList = [];
+
   for (var i =0; i < densityList.length; i++ ) {
       var lat = densityList[i][0];
-      
       var lon = densityList[i][1];
      
       if (lat > minLat && lat < maxLat){
           if (lon > minLong && lon < maxLong){
               geoList.push(densityList[i]);
   }}};
-  
-  console.log(geoList); 
 
+  if (typeof geoList !== 'undefined' && geoList.length > 0) { 
+     res.send(geoList); 
+  } else {
+     res.send("No coordinates within this bounding box"); 
+  } 
 });
+
 
 // Initialize the app.
 var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
   });
+
 
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
